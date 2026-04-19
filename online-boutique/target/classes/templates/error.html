@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{header :: head}"></head>
+<body>
+<header th:replace="~{header :: navbar}"></header>
+
+<main role="main">
+    <div class="py-5">
+        <div class="container bg-light py-3 px-lg-5 py-lg-5">
+            <h1>Uh, oh!</h1>
+            <p>Something has failed. Below are some details for debugging.</p>
+            <p><strong>HTTP Status:</strong> <span th:text="${status}">500</span></p>
+            <pre class="border border-danger p-3" style="white-space: pre-wrap; word-break: keep-all;"
+                 th:text="${error}">Error details</pre>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{footer :: footer}"></footer>
+</body>
+</html>

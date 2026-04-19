@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="recommendations" class="recommendations">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h2>You May Also Like</h2>
+                <div class="row">
+                    <div class="col-md-3" th:each="rec : ${recommendations}">
+                        <div>
+                            <a th:href="@{/product/{id}(id=${rec.id()})}">
+                                <img alt="" th:src="@{${rec.picture()}}">
+                            </a>
+                            <div>
+                                <h5 th:text="${rec.name()}">Product</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

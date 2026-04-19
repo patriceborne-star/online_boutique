@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{header :: head}"></head>
+<body>
+<header th:replace="~{header :: navbar}"></header>
+
+<main role="main">
+    <section class="container" style="max-width: 700px; margin-top: 30px;">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h3>My Profile</h3>
+                <p class="text-muted" th:text="${user.email()}">email</p>
+            </div>
+        </div>
+
+        <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}">Success</div>
+
+        <form method="POST" th:action="@{/profile}" class="cart-checkout-form">
+            <div class="row">
+                <div class="col"><h4>Personal Information</h4></div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-6 cymbal-form-field">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" th:value="${user.firstName()}" required>
+                </div>
+                <div class="col-md-6 cymbal-form-field">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" th:value="${user.lastName()}" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col cymbal-form-field">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" name="phone" th:value="${user.phone()}">
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col"><h4>Shipping Address</h4></div>
+            </div>
+
+            <div class="form-row">
+                <div class="col cymbal-form-field">
+                    <label for="street_address">Street Address</label>
+                    <input type="text" id="street_address" name="street_address" th:value="${user.streetAddress()}" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-4 cymbal-form-field">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" th:value="${user.city()}" required>
+                </div>
+                <div class="col-md-3 cymbal-form-field">
+                    <label for="state">State</label>
+                    <input type="text" id="state" name="state" th:value="${user.state()}" required>
+                </div>
+                <div class="col-md-2 cymbal-form-field">
+                    <label for="zip_code">Zip</label>
+                    <input type="text" id="zip_code" name="zip_code" th:value="${user.zipCode()}" required>
+                </div>
+                <div class="col-md-3 cymbal-form-field">
+                    <label for="country">Country</label>
+                    <input type="text" id="country" name="country" th:value="${user.country()}" required>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col"><h4>Payment Method</h4></div>
+            </div>
+
+            <div class="form-row">
+                <div class="col cymbal-form-field">
+                    <label for="credit_card_number">Credit Card Number</label>
+                    <input type="text" id="credit_card_number" name="credit_card_number"
+                           th:value="${user.creditCardNumber()}" required pattern="\d{16}">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-5 cymbal-form-field">
+                    <label for="credit_card_exp_month">Month</label>
+                    <select name="credit_card_exp_month" id="credit_card_exp_month">
+                        <option value="1" th:selected="${user.creditCardExpMonth() == 1}">January</option>
+                        <option value="2" th:selected="${user.creditCardExpMonth() == 2}">February</option>
+                        <option value="3" th:selected="${user.creditCardExpMonth() == 3}">March</option>
+                        <option value="4" th:selected="${user.creditCardExpMonth() == 4}">April</option>
+                        <option value="5" th:selected="${user.creditCardExpMonth() == 5}">May</option>
+                        <option value="6" th:selected="${user.creditCardExpMonth() == 6}">June</option>
+                        <option value="7" th:selected="${user.creditCardExpMonth() == 7}">July</option>
+                        <option value="8" th:selected="${user.creditCardExpMonth() == 8}">August</option>
+                        <option value="9" th:selected="${user.creditCardExpMonth() == 9}">September</option>
+                        <option value="10" th:selected="${user.creditCardExpMonth() == 10}">October</option>
+                        <option value="11" th:selected="${user.creditCardExpMonth() == 11}">November</option>
+                        <option value="12" th:selected="${user.creditCardExpMonth() == 12}">December</option>
+                    </select>
+                </div>
+                <div class="col-md-4 cymbal-form-field">
+                    <label for="credit_card_exp_year">Year</label>
+                    <input type="number" id="credit_card_exp_year" name="credit_card_exp_year"
+                           th:value="${user.creditCardExpYear()}" min="2025" max="2035" required>
+                </div>
+                <div class="col-md-3 cymbal-form-field">
+                    <label for="credit_card_cvv">CVV</label>
+                    <input type="password" id="credit_card_cvv" name="credit_card_cvv"
+                           th:value="${user.creditCardCvv()}" required pattern="\d{3}">
+                </div>
+            </div>
+
+            <div class="form-row justify-content-center mt-4 mb-4">
+                <div class="col text-center">
+                    <button class="cymbal-button-primary" type="submit">Save Profile</button>
+                </div>
+            </div>
+        </form>
+    </section>
+</main>
+
+<footer th:replace="~{footer :: footer}"></footer>
+</body>
+</html>
