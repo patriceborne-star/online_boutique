@@ -1,34 +1,28 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <body>
-        <footer th:fragment="footer" class="py-5">
-            <div class="footer-top">
-                <div class="container footer-social">
-                    <p class="footer-text">
-                        This is a demo application ported to yugabyteDB. It is
-                        not an actual shop.
-                    </p>
-                    <p class="footer-text">
-                        Based on
-                        <a
-                            href="https://github.com/GoogleCloudPlatform/microservices-demo"
-                            >Google Online Boutique</a
-                        >
-                        &mdash; Powered by <strong>yugabyteDB</strong>
-                    </p>
-                    <p class="footer-text">
-                        <small>
-                            <b>Platform: </b
-                            ><span th:text="${platform_name}">yugabyteDB</span>
-                        </small>
-                    </p>
-                </div>
-            </div>
-        </footer>
-        <script
-            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
-            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-            crossorigin="anonymous"
-        ></script>
-    </body>
+<body>
+<footer th:fragment="footer" class="py-5">
+    <div class="footer-top">
+        <div class="container footer-social">
+            <p class="footer-text">
+                This is a demo application ported to Oracle. It is not an actual shop.
+            </p>
+            <p class="footer-text">
+                Based on <a href="https://github.com/GoogleCloudPlatform/microservices-demo">Google Online Boutique</a>
+                &mdash; Powered by <strong>Oracle</strong>
+            </p>
+            <p class="footer-text">
+                <small>
+                    <b>Platform: </b><span th:text="${platform_name}">Oracle</span>
+                </small>
+            </p>
+        </div>
+    </div>
+</footer>
+<script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+        integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"
+></script>
+</body>
 </html>

@@ -1,2 +1,2 @@
 org.springframework.boot.env.EnvironmentPostProcessor=\
-  com.yugabyte.boutique.config.PropertiesIniLoader
+  com.oracle.boutique.config.PropertiesIniLoader

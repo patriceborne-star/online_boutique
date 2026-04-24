@@ -12,11 +12,11 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.yugabyte</groupId>
+    <groupId>com.oracle</groupId>
     <artifactId>online-boutique</artifactId>
     <version>1.0.0</version>
-    <name>Online Boutique on yugabyteDB</name>
-    <description>Online Boutique e-commerce demo ported to yugabyteDB</description>
+    <name>Online Boutique on Oracle</name>
+    <description>Online Boutique e-commerce demo ported to Oracle</description>
 
     <properties>
         <java.version>21</java.version>
@@ -36,9 +36,8 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

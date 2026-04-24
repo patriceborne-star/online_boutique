@@ -1,13 +1,13 @@
 ![Online Boutique Home Page](<70 - Home page image.png>)
 
-# Online Boutique on yugabyteDB
+# Online Boutique on Oracle
 
-This project is a Spring Boot version of the Online Boutique demo, adapted to run on yugabyteDB with a simple local setup script and a seeded product catalog and user list.
+This project is a Spring Boot version of the Online Boutique demo, adapted to run on Oracle with a simple local setup script and a seeded product catalog and user list.
 
 ## What This Project Does
 
 - Serves a storefront with a nine-product catalog.
-- Uses yugabyteDB tables for users, products, carts, orders, and order items.
+- Uses Oracle tables for users, products, carts, orders, and order items.
 - Supports login, cart management, checkout, profile updates, and order history.
 - Advances order status automatically from `pending` to `shipped` to `delivered` on a schedule.
 
@@ -17,8 +17,8 @@ This project is a Spring Boot version of the Online Boutique demo, adapted to ru
 - Spring Boot 3.2.5
 - Thymeleaf
 - Spring JDBC
-- PostgreSQL JDBC driver
-- yugabyteDB
+- Oracle JDBC driver
+- Oracle
 - Maven wrapper
 
 ## Project Layout
@@ -40,7 +40,7 @@ The application uses these primary tables:
 - `orders`
 - `order_items`
 
-The schema is intentionally straightforward so it is easy to inspect in yugabyteDB and easy to extend for demos or workshops.
+The schema is intentionally straightforward so it is easy to inspect in Oracle and easy to extend for demos or workshops.
 
 ## Seeded Demo Users
 
@@ -51,6 +51,7 @@ The current seed data includes these demo accounts, all using the password `pass
 - Jim Knicely
 - Prasad Radhakrishnan
 - Susan Flynn
+- Patrice Borne
 
 Each user is stored with a `@ybmail.com` email address in [`data.sql`](<online-boutique/src/main/resources/data.sql>).
 
