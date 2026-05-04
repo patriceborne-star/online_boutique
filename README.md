@@ -27,7 +27,7 @@ This project is a Spring Boot version of the Online Boutique demo, adapted to ru
 - [`properties.ini`](<properties.ini>) contains the database connection and application port settings.
 - [`online-boutique/src/main/resources/schema.sql`](<online-boutique/src/main/resources/schema.sql>) defines the database schema.
 - [`online-boutique/src/main/resources/data.sql`](<online-boutique/src/main/resources/data.sql>) seeds the product catalog and demo users.
-- [`online-boutique/src/main/java/com/yugabyte/boutique`](<online-boutique/src/main/java/com/yugabyte/boutique>) contains the Spring Boot application, controllers, repositories, and services.
+- [`online-boutique/src/main/java/com/oracle/boutique`](<online-boutique/src/main/java/com/oracle/boutique>) contains the Spring Boot application, controllers, repositories, and services.
 - [`online-boutique/src/main/resources/templates`](<online-boutique/src/main/resources/templates>) contains the Thymeleaf pages.
 
 ## Database Model
@@ -61,23 +61,23 @@ Each user is stored with a `@ybmail.com` email address in [`data.sql`](<online-b
 
 The login page loads users from the database and lets you sign in with a seeded account:
 
-- [`AuthController.java`](<online-boutique/src/main/java/com/yugabyte/boutique/controller/AuthController.java>)
+- [`AuthController.java`](<online-boutique/src/main/java/com/oracle/boutique/controller/AuthController.java>)
 - [`login.html`](<online-boutique/src/main/resources/templates/login.html>)
 
 ### Browse and Shop
 
 The home page lists products and converts prices using the selected currency:
 
-- [`HomeController.java`](<online-boutique/src/main/java/com/yugabyte/boutique/controller/HomeController.java>)
+- [`HomeController.java`](<online-boutique/src/main/java/com/oracle/boutique/controller/HomeController.java>)
 
 ### Checkout
 
 Checkout places an order, stores shipping details, and renders an order confirmation page:
 
-- [`CheckoutController.java`](<online-boutique/src/main/java/com/yugabyte/boutique/controller/CheckoutController.java>)
+- [`CheckoutController.java`](<online-boutique/src/main/java/com/oracle/boutique/controller/CheckoutController.java>)
 
 ### Profile and Order History
 
 Users can update their profile and review prior orders:
 
-- [`ProfileController.java`](<online-boutique/src/main/java/com/yugabyte/boutique/controller/ProfileController.java>)
+- [`ProfileController.java`](<online-boutique/src/main/java/com/oracle/boutique/controller/ProfileController.java>)

@@ -2,7 +2,7 @@
 #
 #  60 - Run web app.sh
 #
-#  Online Boutique on yugabyteDB
+#  Online Boutique on Oracle
 #
 #  This script:
 #    1. Reads properties.ini for database connection details
@@ -15,7 +15,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-cd "$SCRIPT_DIR"
+cd "${SCRIPT_DIR}"
 
 # ---------------------------------------------------------------
 #  Parse properties.ini
@@ -38,69 +38,67 @@ while IFS='=' read -r key value; do
         DATABASE_PASSWORD) DB_PASSWORD="$value" ;;
         APPLICATION_PORT)  APP_PORT="$value" ;;
     esac
-done < "$SCRIPT_DIR/properties.ini"
+done < "${SCRIPT_DIR}/properties.ini"
 
-DB_HOST="${DB_HOST:-localhost}"
-DB_PORT="${DB_PORT:-5433}"
-DB_NAME="${DB_NAME:-my_db41}"
-DB_USER="${DB_USER:-yugabyte}"
-APP_PORT="${APP_PORT:-8080}"
+DB_HOST="$DB_HOST:-localhost"
+DB_PORT="$DB_PORT:-1521"
+DB_NAME="$DB_NAME:-my_db41"
+DB_USER="$DB_USER:-oracle"
+APP_PORT="$APP_PORT:-8080"
 
 echo ""
 echo "=============================================="
-echo "  Online Boutique on yugabyteDB"
+echo "  Online Boutique on Oracle"
 echo "=============================================="
-echo "  Host:     $DB_HOST"
-echo "  Port:     $DB_PORT"
-echo "  Database: $DB_NAME"
-echo "  User:     $DB_USER"
+echo "  Host:     ${DB_HOST}"
+echo "  Port:     ${DB_PORT}"
+echo "  Database: ${DB_NAME}"
+echo "  User:     ${DB_USER}"
 echo "=============================================="
 echo ""
 
-# ---------------------------------------------------------------
-#  Find ysqlsh or psql
-# ---------------------------------------------------------------
-YSQLSH=""
-if command -v ysqlsh &>/dev/null; then
-    YSQLSH="ysqlsh"
-elif [ -x /opt/yugabyte/bin/ysqlsh ]; then
-    YSQLSH="/opt/yugabyte/bin/ysqlsh"
-elif command -v psql &>/dev/null; then
-    YSQLSH="psql"
+# --------------
+#  Find sqlplus
+# --------------
+SQLPLUS=""
+if command -v sqlplus &>/dev/null; then
+    SQLPLUS="sqlplus"
+elif [ -x $ORACLE_HOME/bin/sqlplus ]; then
+    SQLPLUS="${ORACLE_HOME}/bin/sqlplus"
 else
-    echo "ERROR: Neither ysqlsh nor psql found. Cannot set up the database."
+    echo "ERROR: Cannot find sqlplus. Cannot set up the database."
     exit 1
 fi
 
-echo "Using SQL client: $YSQLSH"
+echo "Using SQL client: ${SQLPLUS}"
 
 # Build the connection args
-CONN_ARGS="-h $DB_HOST -p $DB_PORT -U $DB_USER"
+CONN_ARGS="${DB_USER}/${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
 if [ -n "$DB_PASSWORD" ]; then
     export PGPASSWORD="$DB_PASSWORD"
 fi
 
-# ---------------------------------------------------------------
+# -----------------------
 #  Recreate the database
-# ---------------------------------------------------------------
+# -----------------------
 echo ""
-echo "--- Dropping database $DB_NAME (if exists) ---"
-$YSQLSH $CONN_ARGS -d yugabyte -c "DROP DATABASE IF EXISTS $DB_NAME;" 2>&1 || true
+echo "--- Dropping database ${DB_NAME} (if exists) ---"
+${SQLPLUS} -s ${CONN_ARGS} <<< "DROP DATABASE IF EXISTS ${DB_NAME};" 2>&1 || true
 
-echo "--- Creating database $DB_NAME ---"
-$YSQLSH $CONN_ARGS -d yugabyte -c "CREATE DATABASE $DB_NAME;"
+echo "--- Creating database ${DB_NAME} ---"
+${SQLPLUS} -s ${CONN_ARGS} <<< "CREATE DATABASE ${DB_NAME};"
 
 echo "--- Creating tables ---"
-$YSQLSH $CONN_ARGS -d "$DB_NAME" -f "$SCRIPT_DIR/online-boutique/src/main/resources/schema.sql"
+${SQLPLUS} -S ${CONN_ARGS} @${SCRIPT_DIR}/online-boutique/src/main/resources/schema.sql
 
 echo "--- Seeding product data ---"
-$YSQLSH $CONN_ARGS -d "$DB_NAME" -f "$SCRIPT_DIR/online-boutique/src/main/resources/data.sql"
+${SQLPLUS} -S ${CONN_ARGS} @${SCRIPT_DIR}/online-boutique/src/main/resources/data.sql
 
 echo ""
 echo "--- Verifying data ---"
-$YSQLSH $CONN_ARGS -d "$DB_NAME" -c "SELECT id, name, price_units || '.' || (price_nanos/10000000) AS price FROM products ORDER BY name;"
+${SQLPLUS} -S ${CONN_ARGS} <<< "SELECT id, name, price_units || '.' || (price_nanos/10000000) AS price FROM ${DB_NAME}.${DB_USER}.products ORDER BY name;"
 echo ""
-$YSQLSH $CONN_ARGS -d "$DB_NAME" -c "SELECT email, first_name || ' ' || last_name AS name, city, state FROM users ORDER BY last_name;"
+${SQLPLUS} -S ${CONN_ARGS} <<< "SELECT email, first_name || ' ' || last_name AS name, city, state FROM ${DB_NAME}.${DB_USER}.users ORDER BY last_name;"
 
 echo ""
 echo "Database ready."
@@ -108,34 +106,37 @@ echo "Database ready."
 # ---------------------------------------------------------------
 #  Build the application (if jar is missing or sources changed)
 # ---------------------------------------------------------------
-export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-arm64
+if [ ! -v JAVA_HOME ]; then
+    export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-arm64
+fi
 
-JAR="$SCRIPT_DIR/online-boutique/target/online-boutique-1.0.0.jar"
 
-if [ ! -f "$JAR" ]; then
+JAR="${SCRIPT_DIR}/online-boutique/target/online-boutique-1.0.0.jar"
+
+if [ ! -f "${JAR}" ]; then
     echo ""
     echo "--- Building the application ---"
-    cd "$SCRIPT_DIR/online-boutique"
+    cd "${SCRIPT_DIR}/online-boutique"
     ./mvnw package -DskipTests -q
-    cd "$SCRIPT_DIR"
+    cd "${SCRIPT_DIR}"
     echo "Build complete."
 else
     echo ""
-    echo "Jar already exists: $JAR"
+    echo "Jar already exists: ${JAR}"
     echo "(Delete it and re-run to force a rebuild)"
 fi
 
-# ---------------------------------------------------------------
+# ------------------------
 #  Launch the application
-# ---------------------------------------------------------------
+# ------------------------
 echo ""
 echo "=============================================="
-echo "  Starting Online Boutique on port $APP_PORT ..."
-echo "  Open http://localhost:$APP_PORT in your browser"
-echo "  Sign in at http://localhost:$APP_PORT/login"
+echo "  Starting Online Boutique on port ${APP_PORT} ..."
+echo "  Open http://localhost:${APP_PORT} in your browser"
+echo "  Sign in at http://localhost:${APP_PORT}/login"
 echo "  Press Ctrl+C to stop"
 echo "=============================================="
 echo ""
 
-cd "$SCRIPT_DIR/online-boutique"
+cd "${SCRIPT_DIR}/online-boutique"
 java -jar target/online-boutique-1.0.0.jar

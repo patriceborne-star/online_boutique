@@ -29,7 +29,7 @@ public final class SessionHelper {
 
     public static void addCommon(Model model, String currency) {
         model.addAttribute("currentYear", Year.now().getValue());
-        model.addAttribute("platform_name", "yugabyteDB");
+        model.addAttribute("platform_name", "oracle");
         model.addAttribute("platform_css", "local");
     }
 }
